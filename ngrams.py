@@ -68,10 +68,11 @@ class NGrams:
 
     def finish_sentence(self, words):
         prediction = self.predict_next_word(words)
-        while prediction != '.':
+        while prediction != '.' and prediction != None:
             words += [prediction]
             prediction = self.predict_next_word(words)
             print(prediction)
+            
         for word in words:
             print(f'{word} ')
         
