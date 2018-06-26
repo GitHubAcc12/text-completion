@@ -57,7 +57,7 @@ class NGrams:
     def predict_next_word(self, words):
         if len(words) > 20:
             words = words[-21:-1]
-        n = len(words)
+        n = len(words) + 1
         
         # TODO Map currently useless, O(1) Searching not used
         for i in range(n, 1, -1):
