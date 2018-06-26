@@ -21,4 +21,4 @@ TODO
 if __name__=='__main__':
     ngrams = NGrams(n=10)
     ngrams.read_file('./testdata/heise_ldap.txt')
-    print(ngrams.ngrams)
+    print(ngrams.predict_next_word(['Sie',  'liegt',  'zurzeit']))

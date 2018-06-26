@@ -7,39 +7,65 @@ class NGrams:
 
     def __init__(self, n):
         self.n = n
-        self.ngrams = {} # ngram[-1] is the "successor"
+        self.ngrams = [{} for i in range(n+2)] # ngram[-1] is the "successor"
 
     def read_file(self, filename):
         with open(filename) as file:
             t_line = []
-            too_short = False
             for line in file:
                 line = line.strip()
                 t_line += self.handle_interpunction(line).split(' ')
-                if too_short:
+                if len(t_line) <= self.n:
                     continue
-                self.extract_ngrams_from_line(t_line)
+                for i in range(2, self.n):
+                    self.extract_ngrams_from_line(t_line, i)
                 t_line = []
         self.filter()
 
     def filter(self):
-        keys_to_remove = []
-        for key, value in self.ngrams.items():
-            for key_, value_ in self.ngrams.items():
-                if key.words == key_.words and key.successor != key_.successor:
-                    keys_to_remove.append(key_ if value > value_ else key)
-        for key in keys_to_remove:
-            self.ngrams.pop(key)
+        for item in self.ngrams:
+            keys_to_remove = []
+            for key, value in item.items():
+                for key_, value_ in item.items():
+                    if key.words == key_.words and key.successor != key_.successor:
+                        if key_ not in keys_to_remove and value > value_:
+                            keys_to_remove.append(key_)
+                        elif key not in keys_to_remove:
+                            keys_to_remove.append(key)
+            # print(item)
+            # print(keys_to_remove)
+            for key in keys_to_remove:
+                item.pop(key)
 
 
-    def extract_ngrams_from_line(self, line):
+    def extract_ngrams_from_line(self, line, n):
         for i in range(len(line)):
             ngram = []
-            for j in range(i, min(self.n+i, len(line))):
+            for j in range(i, min(n+i, len(line))):
                 ngram.append(line[j])
             ngram = NGram(ngram)
-            self.ngrams.update({ngram:self.ngrams.get(ngram, 0)+1})
+            self.ngrams[n].update({ngram:self.ngrams[n].get(ngram, 0)+1})
+
+    def test(self):
+        print(f'Len: {len(self.ngrams)}')
+        for ngrams in self.ngrams:
+            for key, _ in ngrams.items():
+                print(key)
+                print(id(ngrams))
+                break
         
+    def predict_next_word(self, words):
+        if len(words) > 20:
+            words = words[-21:-1]
+        n = len(words)
+        
+        # TODO Map currently useless, O(1) Searching not used
+        for i in range(n, 1, -1):
+            ngrams = self.ngrams[i]
+            for key, _ in ngrams.items():
+                if key.words == words:
+                    return key.successor
+
 
     def handle_interpunction(self, s):
         # Inserts whitespace before each punctuation mark so it gets dealt with like a word
@@ -52,10 +78,22 @@ class NGram:
     def __init__(self, words):
         self.successor = words[-1]
         self.words = words[:-1]
+        self.i = 0
 
     def __str__(self):
         return str(self.words + [self.successor])
     
+    def __eq__(self, other):
+        return self.words == other.words and self.successor == other.successor
+
+    def __hash__(self):
+        val = 0
+        for word in self.words:
+            val += word.__hash__()
+        return val
+    
+
+
     __repr__ = __str__    
 
 
