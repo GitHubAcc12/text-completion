@@ -55,8 +55,8 @@ class NGrams:
                 break
         
     def predict_next_word(self, words):
-        if len(words) > 20:
-            words = words[-21:-1]
+        if len(words) > self.n:
+            words = words[-(self.n+1):-1]
         n = len(words) + 1
         
         # TODO Map currently useless, O(1) Searching not used
@@ -66,6 +66,15 @@ class NGrams:
                 if key.words == words:
                     return key.successor
 
+    def finish_sentence(self, words):
+        prediction = self.predict_next_word(words)
+        while prediction != '.':
+            words += [prediction]
+            prediction = self.predict_next_word(words)
+            print(prediction)
+        for word in words:
+            print(f'{word} ')
+        
 
     def handle_interpunction(self, s):
         # Inserts whitespace before each punctuation mark so it gets dealt with like a word
@@ -91,8 +100,6 @@ class NGram:
         for word in self.words:
             val += word.__hash__()
         return val
-    
-
 
     __repr__ = __str__    
 
