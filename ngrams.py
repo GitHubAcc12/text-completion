@@ -20,23 +20,26 @@ class NGrams:
 
     def __init__(self, n):
         self.n = n
-        self.ngrams = {}
-        self.frequencies = {}
+        self.ngrams = {} # ngram[-1] is the "successor"
 
     def read_file(self, filename):
-        # Handle lines with less than n words
         with open(filename) as file:
-            for line in file:
+            for i in range(len(file)):
+                line = self.handle_interpunction(file[i]).split(' ')
+                while len(line) <= 20:
+                    i += 1
+                    tmp_line = self.handle_interpunction(file[i]).split(' ')
+                    line += tmp_line
                 self.extract_ngrams_from_line(line)
 
     def extract_ngrams_from_line(self, line):
-        ngrams = []
-        line = self.handle_interpunction(line).split(' ')
-        frequencies = [0] * (len(line)-20)
         for i in range(0, len(line), self.n):
-            return
-            
-            
+            ngram = []
+            for j in range(self.n):
+                ngram.append(line[j])
+            self.ngrams.update({ngram:self.ngrams.get(ngram)+1})
+        
+
     def handle_interpunction(self, s):
         # Inserts whitespace before each punctuation mark so it gets dealt with like a word
         s = re.sub('([.,!?()])', r' \1 ', s)
