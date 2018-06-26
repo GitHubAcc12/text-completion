@@ -13,6 +13,7 @@ Maybe smarter:
 TODO
     - Interpunction = ?
     - save interpunction like words --> ngrams, frequency
+    - Class NGram, List unhashable
 """
 
 
@@ -24,13 +25,15 @@ class NGrams:
 
     def read_file(self, filename):
         with open(filename) as file:
-            for i in range(len(file)):
-                line = self.handle_interpunction(file[i]).split(' ')
-                while len(line) <= 20:
-                    i += 1
-                    tmp_line = self.handle_interpunction(file[i]).split(' ')
-                    line += tmp_line
-                self.extract_ngrams_from_line(line)
+            t_line = []
+            too_short = False
+            for line in file:
+                t_line += self.handle_interpunction(line).split(' ')
+                if too_short:
+                    continue
+                self.extract_ngrams_from_line(t_line)
+                t_line = []
+
 
     def extract_ngrams_from_line(self, line):
         for i in range(0, len(line), self.n):
