@@ -34,6 +34,7 @@ class NGrams:
         line = self.handle_interpunction(line).split(' ')
         frequencies = [0] * (len(line)-20)
         for i in range(0, len(line), self.n):
+            return
             
             
     def handle_interpunction(self, s):
