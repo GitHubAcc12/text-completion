@@ -1,8 +1,6 @@
 import re
 
 
-
-
 class NGrams:
 
     def __init__(self, n):
@@ -63,7 +61,6 @@ class NGrams:
         # TODO Map currently useless, O(1) Searching not used
         for i in range(n, 1, -1):
             ngrams = self.ngrams[i]
-            print(ngrams)
             for key, _ in ngrams.items():
                 if key.words == words:
                     return key.successor
@@ -90,19 +87,18 @@ class NGram:
     def __init__(self, words):
         self.successor = words[-1]
         self.words = words[:-1]
-        self.i = 0
 
     def __str__(self):
         return str(self.words + [self.successor])
     
     def __eq__(self, other):
-        return self.words == other.words and self.successor == other.successor
+        return self.__hash__() == other.__hash__()
 
     def __hash__(self):
         val = 0
         for word in self.words:
             val += word.__hash__()
-        return val
+        return val + self.successor.__hash__()
 
     __repr__ = __str__    
 

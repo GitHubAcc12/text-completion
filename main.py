@@ -11,9 +11,8 @@ Maybe smarter:
     - dict of array of strings, array of strings --> key=ngram, value=successors
     - dict of array of strings, array of numbers --> key=ngram, value=frequencies of successors
 TODO
-    - Print autocompletion to file
     - Test with huge trainingdataset
-    - Handle Capital letters
+    - Rewrite ngrams.py: Result --> key: ngram, val: successor
 """
 
 
@@ -43,6 +42,6 @@ def write_to_file(words, filename='output.txt'):
 if __name__=='__main__':
     ngrams = NGrams(n=10)
     ngrams.read_file('./testdata/heise_ldap.txt')
-    result = ngrams.finish_sentence(['Meister'])
+    result = ngrams.finish_sentence(['Sie'])
     write_to_file(result)
     # ngrams.test()
