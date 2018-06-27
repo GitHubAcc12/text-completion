@@ -7,7 +7,7 @@ class NGrams:
 
     def __init__(self, n):
         self.n = n
-        self.ngrams = [{} for i in range(n+2)] # ngram[-1] is the "successor"
+        self.ngrams = [{} for i in range(n+1)] # ngram[-1] is the "successor"
 
     def read_file(self, filename):
         with open(filename) as file:
@@ -17,7 +17,7 @@ class NGrams:
                 t_line += self.handle_interpunction(line).split(' ')
                 if len(t_line) <= self.n:
                     continue
-                for i in range(2, self.n):
+                for i in range(2, self.n+1):
                     self.extract_ngrams_from_line(t_line, i)
                 t_line = []
         self.filter()
@@ -32,8 +32,6 @@ class NGrams:
                             keys_to_remove.append(key_)
                         elif key not in keys_to_remove:
                             keys_to_remove.append(key)
-            # print(item)
-            # print(keys_to_remove)
             for key in keys_to_remove:
                 item.pop(key)
 
@@ -47,20 +45,23 @@ class NGrams:
             self.ngrams[n].update({ngram:self.ngrams[n].get(ngram, 0)+1})
 
     def test(self):
+        # General testing stuff
         print(f'Len: {len(self.ngrams)}')
         for ngrams in self.ngrams:
             for key, _ in ngrams.items():
                 print(key)
                 print(id(ngrams))
                 break
+       
+        print(self.ngrams[-1])
         
     def predict_next_word(self, words):
-        if len(words) > self.n:
-            words = words[-(self.n+1):-1]
+        if len(words) >= self.n:
+            words = words[1-(self.n):len(words)]
         n = len(words) + 1
         
         # TODO Map currently useless, O(1) Searching not used
-        for i in range(n, 1, -1):
+        for i in range(n, 0, -1):
             ngrams = self.ngrams[i]
             for key, _ in ngrams.items():
                 if key.words == words:
@@ -68,13 +69,13 @@ class NGrams:
 
     def finish_sentence(self, words):
         prediction = self.predict_next_word(words)
-        while prediction != '.' and prediction != None:
+        while prediction != None:
+            if prediction == None:
+                print(words)
+                break
             words += [prediction]
             prediction = self.predict_next_word(words)
-            print(prediction)
-            
-        for word in words:
-            print(f'{word} ')
+        return words
         
 
     def handle_interpunction(self, s):

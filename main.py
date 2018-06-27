@@ -21,4 +21,6 @@ TODO
 if __name__=='__main__':
     ngrams = NGrams(n=10)
     ngrams.read_file('./testdata/heise_ldap.txt')
-    ngrams.finish_sentence(['Sie',  'liegt',  'zurzeit'])
+    result = ngrams.finish_sentence(['Sie',  'liegt',  'zurzeit'])
+    print(f' Result: {result}')
+    # ngrams.test()
