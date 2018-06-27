@@ -11,10 +11,8 @@ Maybe smarter:
     - dict of array of strings, array of strings --> key=ngram, value=successors
     - dict of array of strings, array of numbers --> key=ngram, value=frequencies of successors
 TODO
-    - Interpunction = ?
-    - save interpunction like words --> ngrams, frequency
-    - Class NGram, List unhashable
-    - Hash ngram only based on internal list, else dict is useless
+    - Print autocompletion to file
+    - Test with huge trainingdataset
 """
 
 
