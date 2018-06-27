@@ -13,6 +13,7 @@ Maybe smarter:
 TODO
     - Print autocompletion to file
     - Test with huge trainingdataset
+    - Handle Capital letters
 """
 
 
@@ -25,7 +26,7 @@ def clear_file(filename):
 
 def write_to_file(words, filename='output.txt'):
     clear_file(filename)
-    with open(filename, 'a') as file:
+    with open(filename, 'a', encoding='utf-8') as file:
         towrite = ''
         for i in range(len(words)-1):
             towrite += words[i]
@@ -42,6 +43,6 @@ def write_to_file(words, filename='output.txt'):
 if __name__=='__main__':
     ngrams = NGrams(n=10)
     ngrams.read_file('./testdata/heise_ldap.txt')
-    result = ngrams.finish_sentence(['Sie'])
+    result = ngrams.finish_sentence(['Meister'])
     write_to_file(result)
     # ngrams.test()

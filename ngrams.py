@@ -10,7 +10,7 @@ class NGrams:
         self.ngrams = [{} for i in range(n+1)] # ngram[-1] is the "successor"
 
     def read_file(self, filename):
-        with open(filename) as file:
+        with open(filename, encoding='utf-8') as file:
             t_line = []
             for line in file:
                 line = line.strip()
@@ -61,8 +61,9 @@ class NGrams:
         n = len(words) + 1
         
         # TODO Map currently useless, O(1) Searching not used
-        for i in range(n, 0, -1):
+        for i in range(n, 1, -1):
             ngrams = self.ngrams[i]
+            print(ngrams)
             for key, _ in ngrams.items():
                 if key.words == words:
                     return key.successor
