@@ -2,7 +2,7 @@ from ngrams import *
 
 """
 Dumb:
-    - For each word: save all predecessing n-grams and their frequency
+    - For each word: save all preceding n-grams and their frequency
     - dict of string, array of strings --> key=word, array of n-grams
     - dict of string, array of numbers --> key=word, array of frequencies
 
